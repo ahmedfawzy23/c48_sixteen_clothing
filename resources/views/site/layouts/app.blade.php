@@ -27,6 +27,8 @@ https://templatemo.com/tm-546-sixteen-clothing
     <link rel="stylesheet" href="{{ asset('site') }}/assets/css/templatemo-sixteen.css">
     <link rel="stylesheet" href="{{ asset('site') }}/assets/css/owl.css">
 
+    @stack('styles')
+
 </head>
 
 <body>
@@ -46,6 +48,7 @@ https://templatemo.com/tm-546-sixteen-clothing
     <!-- Page Content -->
     <main>
         @yield('content')
+        @include('site.partials.alerts')
     </main>
 
 
@@ -75,6 +78,8 @@ https://templatemo.com/tm-546-sixteen-clothing
             }
         }
     </script>
+
+    @stack('scripts')
 
 
 </body>

@@ -57,7 +57,7 @@
                 </div>
                 <div class="col-md-6">
                     <div class="left-content">
-                        {!! $about->about_text !!}
+                        {!! $about?->about_text !!}
                         <a href="about.html" class="filled-button">Read More</a>
                     </div>
                 </div>

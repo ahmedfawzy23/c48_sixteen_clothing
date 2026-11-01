@@ -12,7 +12,7 @@ class HomeController extends Controller
     public function index()
     {
         $about = About::first();
-        $products = Product::select('id', 'title', 'description', 'price', 'image')
+        $products = Product::select('id', 'title', 'description', 'price', 'image', 'slug')
             ->active()
             ->latest()
             ->take(6)

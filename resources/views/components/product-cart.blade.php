@@ -1,8 +1,8 @@
 @props(['product'])
 <div class="product-item">
-    <a href="#"><img src="{{ $product->image }}" alt=""></a>
+    <a href="{{ route('products.show', $product->slug) }}"><img src="{{ $product->image }}" alt=""></a>
     <div class="down-content">
-        <a href="#">
+        <a href="{{ route('products.show', $product->slug) }}">
             <h4>{{ $product->title }}</h4>
         </a>
         <h6>${{ $product->price }}</h6>
