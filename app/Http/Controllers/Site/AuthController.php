@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Site;
 
 use App\Http\Controllers\Controller;
+use App\Models\Product;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -26,6 +27,11 @@ class AuthController extends Controller
         $user = User::create($validated);
 
         auth()->login($user);
+        $this->syncSessionCartToDatabase($user);
+
+
+
+
         session()->regenerateToken();
         return redirect()->route('home')->with('success', 'User register successfully');
     }
@@ -53,6 +59,7 @@ class AuthController extends Controller
         }
 
         auth()->login($user);
+        $this->syncSessionCartToDatabase($user);
 
         session()->regenerateToken();
         return redirect()->route('home')->with('success', 'User Login successfully');
@@ -64,5 +71,30 @@ class AuthController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
         return redirect()->route('home')->with('success', 'User Logout successfully');
+    }
+
+
+    private function syncSessionCartToDatabase(User $user)
+    {
+        $cart = session()->get('cart', []);
+        if (empty($cart)) {
+            return;
+        }
+
+        foreach ($cart as $product_id => $quantity) {
+            $product = Product::find($product_id);
+            if (!$product) continue;
+
+            $cartItem = $user->cartItems()->where('product_id', $product->id)->first();
+            $curruntQty = $cartItem ? $cartItem->quantity : 0;
+            $newQty = $curruntQty + $quantity;
+
+            $finalQty = min($newQty, $product->stock);
+
+            $user->cartItems()->updateOrCreate(
+                ['product_id' => $product->id],
+                ['quantity' => $finalQty]
+            );
+        }
     }
 }

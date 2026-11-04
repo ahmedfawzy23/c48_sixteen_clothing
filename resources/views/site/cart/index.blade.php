@@ -33,7 +33,16 @@
                         <th scope="row">{{ $loop->iteration }}</th>
                         <td>{{ $item['product']->title }}</td>
                         <td>{{ $item['product']->price }}</td>
-                        <td>{{ $item['quantity'] }}</td>
+                        <td>
+                            <form method="post" action="{{ route('cart.update', $item['product']->id) }}">
+                                @csrf
+                                @method('patch')
+                                <input style="width: 80px;" type="number" name="quantity" value="{{ $item['quantity'] }}"
+                                    min="1" max="{{ $item['product']->stock }}">
+                                <button type="submit" class="btn btn-info">Update</button>
+                            </form>
+
+                        </td>
                         <td>{{ $item['product']->price * $item['quantity'] }}</td>
                         <td>
                             <form action="{{ route('cart.remove', $item['product']->id) }}" method="post">

@@ -16,16 +16,26 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::get('/products', [ProductController::class, 'index'])->name('products');
 Route::get('/products/{product:slug}', [ProductController::class, 'show'])->name('products.show');
-Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
-Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
 
-Route::delete('/cart/clear', [CartController::class, 'clear'])->name('cart.clear');
-Route::delete('/cart/{product}', [CartController::class, 'remove'])->name('cart.remove');
+Route::prefix('cart')->group(function () {
+    Route::get('/', [CartController::class, 'index'])->name('cart.index');
+    Route::post('/add', [CartController::class, 'add'])->name('cart.add');
+
+    Route::delete('/clear', [CartController::class, 'clear'])->name('cart.clear');
+    Route::patch('/{product}/update', [CartController::class, 'update'])->name('cart.update');
+    Route::delete('/{product}', [CartController::class, 'remove'])->name('cart.remove');
+});
 
 
-Route::get('/about', function () {
-    return view('site.about');
-})->name('about');
-Route::get('/contact', function () {
-    return view('site.contact');
-})->name('contact');
+
+Route::middleware('auth')->group(function () {
+
+    Route::get('/about', function () {
+        return view('site.about');
+    })->name('about');
+
+
+    Route::get('/contact', function () {
+        return view('site.contact');
+    })->name('contact');
+});
