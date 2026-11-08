@@ -2,8 +2,10 @@
 
 use App\Http\Controllers\Site\AuthController;
 use App\Http\Controllers\Site\CartController;
+use App\Http\Controllers\Site\CheckoutController;
 use App\Http\Controllers\Site\HomeController;
 use App\Http\Controllers\Site\ProductController;
+use App\Http\Controllers\ProductController as AdminProductController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/register', [AuthController::class, 'showRegistrationForm'])->name('register.show');
@@ -26,6 +28,9 @@ Route::prefix('cart')->group(function () {
     Route::delete('/{product}', [CartController::class, 'remove'])->name('cart.remove');
 });
 
+Route::get('/checkout', [CheckoutController::class, 'index'])->middleware('auth')->name('checkout');
+Route::post('/checkout', [CheckoutController::class, 'store'])->middleware('auth')->name('checkout.store');
+
 
 
 Route::middleware('auth')->group(function () {
@@ -38,4 +43,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/contact', function () {
         return view('site.contact');
     })->name('contact');
+});
+
+Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
+
+    Route::view('/', 'admin.layouts.app');
+
+    Route::resource('products', AdminProductController::class);
 });

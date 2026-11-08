@@ -64,11 +64,13 @@
             <h2>Cart Total</h2>
             <p>Total : {{ $totalPrice }}</p>
 
-            <form action="{{ route('cart.clear') }}" method="post">
+            <form action="{{ route('cart.clear') }}" method="post" class="d-inline">
                 @csrf
                 @method('delete')
                 <button type="submit" class="btn btn-danger btn-sm">Clear Cart</button>
             </form>
+            <a href="{{ route('checkout') }}" class="btn btn-success btn-sm">Check out</a>
+
 
         @endif
 
