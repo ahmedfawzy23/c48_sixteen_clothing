@@ -18,6 +18,7 @@ class AdminMiddleware
         if (!auth()->user()->is_admin) { // 0 1
             abort(403);
         }
+        // dd();
         return $next($request);
     }
 }

@@ -1,11 +1,12 @@
 <?php
 
+use App\Http\Controllers\Admin\OrderController;
+use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Site\AuthController;
 use App\Http\Controllers\Site\CartController;
 use App\Http\Controllers\Site\CheckoutController;
 use App\Http\Controllers\Site\HomeController;
 use App\Http\Controllers\Site\ProductController;
-use App\Http\Controllers\ProductController as AdminProductController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/register', [AuthController::class, 'showRegistrationForm'])->name('register.show');
@@ -49,5 +50,8 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
 
     Route::view('/', 'admin.layouts.app');
 
-    Route::resource('products', AdminProductController::class);
+    Route::resource('products', AdminProductController::class)->names('admin.products');
+    Route::patch('products/{product}/toggle', [AdminProductController::class, 'toggle'])->name('admin.products.toggle');
+    Route::get('orders', [OrderController::class, 'index'])->name('admin.orders');
+    Route::post('orders/{order}', [OrderController::class, 'updateStatus'])->name('admin.orders.updateStatus');
 });

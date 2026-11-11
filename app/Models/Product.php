@@ -10,6 +10,7 @@ class Product extends Model
 {
     /** @use HasFactory<\Database\Factories\ProductFactory> */
     use HasFactory;
+    protected $guarded = [];
 
     public function category()
     {
@@ -30,5 +31,13 @@ class Product extends Model
     public function orderItems()
     {
         return $this->hasMany(OrderItem::class);
+    }
+
+    public function getImageAttribute($value)
+    {
+        if (str_starts_with($value, 'http')) {
+            return $value;
+        }
+        return asset("storage/{$value}");
     }
 }
