@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Site;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\RegisterRequest;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -15,21 +16,15 @@ class AuthController extends Controller
         return view('site.auth.register');
     }
 
-    public function register(Request $request)
+    public function register(RegisterRequest $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email|max:255',
-            'password' => 'required|min:6|confirmed',
-        ]);
+        $validated = $request->validated();
         // $validated['password'] = bcrypt($validated['password']);
         $validated['password'] = Hash::make($validated['password']);
         $user = User::create($validated);
 
         auth()->login($user);
         $this->syncSessionCartToDatabase($user);
-
-
 
 
         session()->regenerateToken();

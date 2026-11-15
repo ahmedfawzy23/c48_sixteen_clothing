@@ -74,6 +74,7 @@ class CheckoutController extends Controller
         if (!$order) {
             return redirect()->route('cart.index')->with('error', 'Failed to place order. Please try again');
         }
+
         return redirect()->route('home')->with('success', 'Order placed successfully');
     }
 }

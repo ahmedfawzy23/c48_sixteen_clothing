@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Mail\OrderConfirmationMail;
 use App\Models\Order;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class OrderController extends Controller
 {
@@ -23,7 +25,7 @@ class OrderController extends Controller
         $order->status = $request->status;
         $order->save();
 
-        #TODO:send mail
+        Mail::to($order->user->email)->send(new OrderConfirmationMail($order));
 
         return back()->with('success', 'Order updated successfully');
     }
