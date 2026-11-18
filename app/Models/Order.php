@@ -13,6 +13,10 @@ class Order extends Model
         'shipping_address',
         'total',
         'status',
+        'payment_method',
+        'payment_status',
+        'stripe_session_id',
+        'payment_payment_id'
     ];
 
     public function user()

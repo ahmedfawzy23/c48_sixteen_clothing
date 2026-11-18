@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Site;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use App\Services\StripePaymentService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -66,15 +67,18 @@ class CheckoutController extends Controller
                 }
             }
 
-            $user->cartItems()->delete();
-
             return $order;
         });
 
-        if (!$order) {
-            return redirect()->route('cart.index')->with('error', 'Failed to place order. Please try again');
-        }
+        return app(StripePaymentService::class)->createCheckoutSession($order);
+    }
 
+    public function success()
+    {
         return redirect()->route('home')->with('success', 'Order placed successfully');
+    }
+    public function cancel()
+    {
+        return redirect()->route('home')->with('error', 'Order cancelled successfully');
     }
 }
