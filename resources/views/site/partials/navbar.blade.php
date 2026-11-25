@@ -15,6 +15,9 @@
                     <x-nav-link route="about" lable="About" />
                     <x-nav-link route="contact" lable="Contact" />
                     <x-nav-link route="cart.index" lable="Cart" />
+                    <li class="nav-item">
+                        <livewire:cart-count />
+                    </li>
                     @guest
                         <x-nav-link route="register.show" lable="Register" />
                         <x-nav-link route="login.show" lable="Login" />

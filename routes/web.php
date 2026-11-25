@@ -60,3 +60,6 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
     Route::get('orders', [OrderController::class, 'index'])->name('admin.orders');
     Route::post('orders/{order}', [OrderController::class, 'updateStatus'])->name('admin.orders.updateStatus');
 });
+
+
+Route::view('/counter', 'site.counter');
